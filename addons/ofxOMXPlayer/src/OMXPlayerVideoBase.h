@@ -73,5 +73,6 @@ public:
 	void						UnLock();
 	void						LockDecoder();
 	void						UnLockDecoder();
-	
+	//void resetCounter();
+	int	 counter;
 };

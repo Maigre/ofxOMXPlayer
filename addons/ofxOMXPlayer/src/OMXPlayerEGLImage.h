@@ -17,6 +17,6 @@ public:
 	bool Open(COMXStreamInfo &hints, OMXClock *av_clock);
 	bool OpenDecoder();
 	
-	OMXEGLImage*				eglImageDecoder;
+	
 };
 

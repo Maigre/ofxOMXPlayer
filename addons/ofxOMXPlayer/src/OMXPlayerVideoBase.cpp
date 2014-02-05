@@ -1,8 +1,9 @@
 
 #include "OMXPlayerVideoBase.h"
-
+ 
 OMXPlayerVideoBase::OMXPlayerVideoBase()
 {
+	counter  = 0;
 	m_decoder = NULL;
 	m_pStream = NULL;
 	pthread_cond_init(&m_packet_cond, NULL);
@@ -86,6 +87,19 @@ bool OMXPlayerVideoBase::Decode(OMXPacket *pkt)
 		m_pts = pkt->pts;
 	}
 	
+	if (pkt->dts == DVD_NOPTS_VALUE && pkt->pts == DVD_NOPTS_VALUE)
+	{
+		//just a guess but seems to work ok
+		//pkt->pts = pkt->dts = 40000*counter;
+		counter++;
+	}else 
+	{
+		if (pkt->pts == DVD_NOPTS_VALUE)
+		{
+			pkt->pts = pkt->dts;
+		}
+	}
+	
 	if((int)m_decoder->GetFreeSpace() > pkt->size)
     {
 		if(pkt->pts != DVD_NOPTS_VALUE)
@@ -97,12 +111,12 @@ bool OMXPlayerVideoBase::Decode(OMXPacket *pkt)
 			m_iCurrentPts = pkt->dts;
 		}
 		bool doDecodeFrameDebugging  = true;
-		if (doDecodeFrameDebugging) 
+		if (doDecodeFrameDebugging && ofGetFrameNum()%10==0 ) 
 		{
 			ofLog(OF_LOG_VERBOSE, "OMXPlayerVideoBase::Decode dts:%.0f pts:%.0f cur:%.0f, size:%d", pkt->dts, pkt->pts, m_iCurrentPts, pkt->size);
 
 		}
-		m_decoder->Decode(pkt->data, pkt->size, pkt->dts, pkt->pts);
+		m_decoder->Decode(pkt->data, pkt->size, pkt->pts, pkt->pts);
 		ret = true;
     }
     else
@@ -111,8 +125,9 @@ bool OMXPlayerVideoBase::Decode(OMXPacket *pkt)
 		OMXClock::OMXSleep(10);
 	}
 	return ret;
-}
+
 	
+}
 
 
 void OMXPlayerVideoBase::Flush()
@@ -120,6 +135,8 @@ void OMXPlayerVideoBase::Flush()
 	ofLogVerbose() << "OMXPlayerVideoBase::Flush start";
 	Lock();
 	LockDecoder();
+	//resetCounter();
+	counter = 0;
 	m_flush = true;
 	while (!m_packets.empty())
 	{

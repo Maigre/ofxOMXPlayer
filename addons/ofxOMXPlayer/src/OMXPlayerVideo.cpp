@@ -117,8 +117,8 @@ bool OMXPlayerVideo::OpenDecoder()
 
   m_frametime = (double)DVD_TIME_BASE / m_fps;
 
-  nonTextureDecoder = new COMXVideo();
-	m_decoder = (OMXDecoderBase*)nonTextureDecoder;
+  COMXVideo* nonTextureDecoder = new COMXVideo();
+  m_decoder = (OMXDecoderBase*)nonTextureDecoder;
   if(!nonTextureDecoder->Open(m_hints, m_av_clock, m_display_aspect, m_Deinterlace, m_hdmi_clock_sync))
   {
 	
@@ -126,18 +126,13 @@ bool OMXPlayerVideo::OpenDecoder()
     return false;
   }
 	
-  stringstream info;
-  info << "Video codec: "	<<	m_decoder->GetDecoderName()		<< "\n";
-  info << "Video width: "	<<	m_hints.width					<< "\n";
-  info << "Video height: "	<<	m_hints.height					<< "\n";
-  info << "Video profile: "	<<	m_hints.profile					<< "\n";
-  info << "Video fps: "		<<	m_fps							<< "\n";	
-  ofLogVerbose(__func__) << "\n" << info;
-  
-/*ofLog(OF_LOG_VERBOSE, "Video codec %s width %d height %d profile %d fps %f\n",
-	m_decoder->GetDecoderName().c_str() , m_hints.width, m_hints.height, m_hints.profile, m_fps);*/
-  
-
+	stringstream info;
+	info << "Video codec: "		<<	m_decoder->GetDecoderName()		<< "\n";
+	info << "Video m_fps: "		<<	m_fps	<< "\n";
+	info << m_hints.toString()									<< "\n";
+	
+	
+	ofLogVerbose(__func__) << "\n" << info.str();
   
 
   return true;

@@ -21,7 +21,7 @@ OMXReader::OMXReader()
 	m_eof           = false;
 	m_chapter_count = 0;
 	m_iCurrentPts   = DVD_NOPTS_VALUE;
-	
+
 	for(int i = 0; i < MAX_STREAMS; i++)
 		m_streams[i].extradata = NULL;
 	
@@ -352,7 +352,9 @@ bool OMXReader::SeekTime(int time, bool backwords, double *startpts)
 	{
 		UpdateCurrentPTS();
 	}else {
-		ofLogVerbose(__func__) << "av_seek_frame returned >= 0, no UpdateCurrentPTS" << ret;
+		ofLogVerbose(__func__) << "av_seek_frame returned >= 0, - rewinding file" << ret;
+		m_pFile->rewindFile();
+		UpdateCurrentPTS();
 	}
 
 	
@@ -443,12 +445,12 @@ OMXPacket *OMXReader::Read()
 	// lavf sometimes bugs out and gives 0 dts/pts instead of no dts/pts
 	// since this could only happens on initial frame under normal
 	// circomstances, let's assume it is wrong all the time
-#if 0
+//#if 0
 	if(pkt.dts == 0)
 		pkt.dts = AV_NOPTS_VALUE;
 	if(pkt.pts == 0)
 		pkt.pts = AV_NOPTS_VALUE;
-#endif
+//#endif
 	if(m_bMatroska && pStream->codec && pStream->codec->codec_type == AVMEDIA_TYPE_VIDEO)
 	{ // matroska can store different timestamps
 		// for different formats, for native stored
@@ -1033,6 +1035,12 @@ void OMXReader::UpdateCurrentPTS()
 	for(unsigned int i = 0; i < m_pFormatContext->nb_streams; i++)
 	{
 		AVStream *stream = m_pFormatContext->streams[i];
+		if (stream) 
+		{
+			ofLogVerbose() << "stream->cur_dts: " << stream->cur_dts;
+			ofLogVerbose() << "stream->first_dts: " <<  stream->first_dts;
+		}
+		
 		if(stream && stream->cur_dts != (int64_t)AV_NOPTS_VALUE)
 		{
 			double ts = ConvertTimestamp(stream->cur_dts, stream->time_base.den, stream->time_base.num);

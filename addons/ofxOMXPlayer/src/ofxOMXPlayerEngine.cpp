@@ -298,8 +298,10 @@ void ofxOMXPlayerEngine::Process()
 				 */
 				
 				if (doLooping)
-				{										
+				{		
 					omxReader.SeekTime(0 * 1000.0f, AVSEEK_FLAG_BACKWARD, &startpts);
+					
+					
 					if(hasAudio)
 					{
 						loop_offset = audioPlayer->GetCurrentPTS();						

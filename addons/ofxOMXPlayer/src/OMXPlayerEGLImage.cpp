@@ -21,7 +21,7 @@ OMXPlayerEGLImage::OMXPlayerEGLImage()
 	m_iVideoDelay   = 0;
 	m_pts           = DVD_NOPTS_VALUE;
 	m_speed         = DVD_PLAYSPEED_NORMAL;
-	eglImageDecoder = NULL;
+	//eglImageDecoder = NULL;
 	ofLogVerbose() << "OMXPlayerEGLImage CONSTRUCT";
 }
 
@@ -89,27 +89,23 @@ bool OMXPlayerEGLImage::OpenDecoder()
 	}
 
 	m_frametime = (double)DVD_TIME_BASE / m_fps;
-
-	if (!eglImageDecoder) 
-	{
-		eglImageDecoder = new OMXEGLImage();
-
-	}
+	OMXEGLImage* eglImageDecoder = new OMXEGLImage();
 	
 	m_decoder = (OMXDecoderBase*)eglImageDecoder;
 	
 	if(!eglImageDecoder->Open(m_hints, m_av_clock))
 	{
 		CloseDecoder();
+		ofLogError(__func__) << "COULD NOT OPEND DECODER";
 		return false;
 	}
 
 	stringstream info;
-	info << "Video codec: "	<<	m_decoder->GetDecoderName()		<< "\n";
-	info << "Video width: "	<<	m_hints.width					<< "\n";
-	info << "Video height: "	<<	m_hints.height					<< "\n";
-	info << "Video profile: "	<<	m_hints.profile					<< "\n";
-	info << "Video fps: "		<<	m_fps							<< "\n";	
+	info << "Video codec: "		<<	m_decoder->GetDecoderName()		<< "\n";
+	info << "Video m_fps: "		<<	m_fps	<< "\n";
+	info << m_hints.toString()									<< "\n";
+	
+	
 	ofLogVerbose(__func__) << "\n" << info.str();
 	
 
