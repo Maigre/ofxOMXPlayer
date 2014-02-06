@@ -196,8 +196,8 @@ bool OMXEGLImage::Open(COMXStreamInfo &hints, OMXClock *clock)
 		OMX_NALSTREAMFORMATTYPE nalStreamFormat;
 		OMX_INIT_STRUCTURE(nalStreamFormat);
 		nalStreamFormat.nPortIndex = m_omx_decoder.GetInputPort();
-		nalStreamFormat.eNaluFormat = OMX_NaluFormatOneNaluPerBuffer; //OMX_NaluFormatStartCodes
-		
+		//nalStreamFormat.eNaluFormat = OMX_NaluFormatOneNaluPerBuffer; //
+		nalStreamFormat.eNaluFormat = OMX_NaluFormatStartCodes;
 		error = m_omx_decoder.SetParameter((OMX_INDEXTYPE)OMX_IndexParamNalStreamFormatSelect, &nalStreamFormat);
 		if (error == OMX_ErrorNone)
 		{
@@ -460,7 +460,7 @@ int OMXEGLImage::Decode(uint8_t *pData, int iSize, double dts, double pts)
 				{
 					//omx_buffer->nFlags |= OMX_BUFFERFLAG_TIME_UNKNOWN;
 					omx_buffer->nFlags = OMX_BUFFERFLAG_TIME_UNKNOWN;
-					ofLogVerbose() << "OMX_BUFFERFLAG_TIME_UNKNOWN";
+					//ofLogVerbose() << "OMX_BUFFERFLAG_TIME_UNKNOWN";
 				}
 			}
 			
