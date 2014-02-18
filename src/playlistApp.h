@@ -2,7 +2,6 @@
 
 #include "ofMain.h"
 #include "ofxOMXPlayer.h"
-#include "GlobalEGLContainer.h"
 #include "ConsoleListener.h"
 
 

@@ -22,6 +22,7 @@ OMXPlayerVideoBase::OMXPlayerVideoBase()
 
 OMXPlayerVideoBase::~OMXPlayerVideoBase()
 {
+	ofLogVerbose(__func__) << "START";
 	Close();
 	
 	pthread_cond_destroy(&m_packet_cond);

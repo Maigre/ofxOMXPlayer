@@ -23,6 +23,9 @@ OMXPlayerEGLImage::OMXPlayerEGLImage()
 	m_speed         = DVD_PLAYSPEED_NORMAL;
 	eglImageDecoder = NULL;
 	ofLogVerbose() << "OMXPlayerEGLImage CONSTRUCT";
+	
+
+	
 }
 
 
@@ -56,18 +59,18 @@ bool OMXPlayerEGLImage::Open(COMXStreamInfo &hints, OMXClock *av_clock)
 	m_pts         = 0;
 	m_speed       = DVD_PLAYSPEED_NORMAL;
 	m_FlipTimeStamp = m_av_clock->GetAbsoluteClock();
-
+	
 	if(!OpenDecoder())
 	{
 		Close();
 		return false;
 	}
-
+	
 	Create();
 	
 
 	m_open        = true;
-
+	
 	return true;
 }
 

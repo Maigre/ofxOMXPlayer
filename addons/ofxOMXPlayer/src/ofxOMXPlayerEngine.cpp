@@ -123,6 +123,10 @@ ofxOMXPlayerEngine::~ofxOMXPlayerEngine()
 	{
 		listener = NULL;
 	}
+	if (eglPlayer) 
+	{
+		//eglPlayer->eglImageDecoder->destroyEGLImage();
+	}
 	
 	if (videoPlayer != NULL) 
 	{
@@ -161,6 +165,33 @@ ofxOMXPlayerEngine::~ofxOMXPlayerEngine()
 	
 }
 
+int ofxOMXPlayerEngine::getTextureID()
+{
+	if (eglPlayer) 
+	{
+		return eglPlayer->eglImageDecoder->textureID;
+	}
+	return 0;
+}
+
+ofTexture&	ofxOMXPlayerEngine::getTextureReference()
+{
+	if (eglPlayer) 
+	{
+		return eglPlayer->eglImageDecoder->texture;
+	}
+	
+	return emptyTexture;
+
+}
+
+void ofxOMXPlayerEngine::updatePixels()
+{
+	if (eglPlayer) 
+	{
+		return eglPlayer->eglImageDecoder->updatePixels();
+	}
+}
 bool ofxOMXPlayerEngine::setup(ofxOMXPlayerSettings settings)
 {
 	
@@ -239,7 +270,7 @@ bool ofxOMXPlayerEngine::openPlayer()
 		{
 			eglPlayer = new OMXPlayerEGLImage();
 		}
-		GlobalEGLContainer::getInstance().generateEGLImage(videoWidth, videoHeight);
+		//GlobalEGLContainer::getInstance().generateEGLImage(videoWidth, videoHeight);
 		didVideoOpen = eglPlayer->Open(videoStreamInfo, &clock);
 		videoPlayer = (OMXPlayerVideoBase*)eglPlayer;
 	}else 

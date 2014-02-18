@@ -39,12 +39,11 @@ void pixelsApp::update()
 		
 		omxPlayer.updatePixels();
 		//ofImage version
-		//pixelOutput.setFromPixels(GlobalEGLContainer::getInstance().pixels, omxPlayer.getWidth(), omxPlayer.getHeight(), OF_IMAGE_COLOR_ALPHA, true);
 		if (!pixelOutput.isAllocated()) 
 		{
 			pixelOutput.allocate(omxPlayer.getWidth(), omxPlayer.getHeight(), GL_RGBA);
 		}
-		pixelOutput.loadData(GlobalEGLContainer::getInstance().pixels, omxPlayer.getWidth(), omxPlayer.getHeight(), GL_RGBA);
+		//pixelOutput.loadData(GlobalEGLContainer::getInstance().pixels, omxPlayer.getWidth(), omxPlayer.getHeight(), GL_RGBA);
 	}
 	
 	

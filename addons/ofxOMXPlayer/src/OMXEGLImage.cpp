@@ -4,6 +4,15 @@
 OMXEGLImage::OMXEGLImage()
 {
 	eglBuffer = NULL;
+	textureID = 0;
+	videoWidth =0;
+	videoHeight = 0;
+	appEGLWindow = NULL;
+	eglImage = NULL;
+	context = NULL;
+	display = NULL;
+	hasGenerated = false;
+	isExiting = false;
 	
 }
 
@@ -30,6 +39,7 @@ OMX_ERRORTYPE onFillBufferDone(OMX_HANDLETYPE hComponent,
 
 bool OMXEGLImage::Open(COMXStreamInfo &hints, OMXClock *clock)
 {
+	generateEGLImage(hints.width, hints.height);
 	OMX_ERRORTYPE error   = OMX_ErrorNone;
 	
 
@@ -337,7 +347,7 @@ bool OMXEGLImage::Open(COMXStreamInfo &hints, OMXClock *clock)
 	
 	
 	
-	error = m_omx_render.UseEGLImage(&eglBuffer, m_omx_render.GetOutputPort(), NULL, GlobalEGLContainer::getInstance().eglImage);
+	error = m_omx_render.UseEGLImage(&eglBuffer, m_omx_render.GetOutputPort(), NULL, eglImage);
 	if(error == OMX_ErrorNone)
 	{
 		ofLogVerbose(__func__) << "m_omx_render UseEGLImage PASS";

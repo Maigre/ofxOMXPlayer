@@ -80,6 +80,24 @@ public:
 	int speedMultiplier;
 	
 	bool doSeek;
+	
+	ofTexture emptyTexture;
+	/*
+	ofFbo fbo;
+	ofTexture texture;
+	EGLImageKHR eglImage;
+	GLuint textureID;
+	ofAppEGLWindow*		appEGLWindow;
+	EGLDisplay			display;
+	EGLContext			context;
+	bool hasGenerated;
+	int videoWidth;
+	int videoHeight;
+	unsigned char * pixels;
+	bool isExiting;*/
+	int getTextureID();
+	ofTexture&	getTextureReference();
+	void updatePixels();
 private:
 	
 	COMXCore				omxCore;

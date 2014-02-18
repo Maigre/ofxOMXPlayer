@@ -1,5 +1,6 @@
 #pragma once
 #include "OMXPlayerVideoBase.h"
+#include "ofAppEGLWindow.h"
 
 
 #include "OMXEGLImage.h"
@@ -14,9 +15,12 @@ class OMXPlayerEGLImage : public OMXPlayerVideoBase
 {
 public:
 	OMXPlayerEGLImage();
+	
+	
 	bool Open(COMXStreamInfo &hints, OMXClock *av_clock);
 	bool OpenDecoder();
 	
 	OMXEGLImage*				eglImageDecoder;
+	
 };
 
